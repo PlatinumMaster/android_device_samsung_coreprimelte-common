@@ -1,0 +1,21 @@
+# Android fstab file.
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+#TODO: Add 'check' as fs_mgr_flags with data partition.
+# Currently we dont have e2fsck compiled. So fs check would failed.
+
+#<src>                                       <mnt_point>          <type>  <mnt_flags and options>                                                                         <fs_mgr_flags>
+/dev/block/platform/soc.0/mmcblk0p25        				 /system              ext4    ro,barrier=1                                                                                    wait
+/dev/block/platform/soc.0/mmcblk0p27      					 /data                ext4    noatime,nosuid,nodev,noauto_da_alloc,journal_async_commit,errors=panic                          wait,check,encryptable=footer,length=-16384
+/dev/block/platform/soc.0/mmcblk0p26          				 /cache               ext4    noatime,nosuid,nodev,noauto_da_alloc,journal_async_commit,errors=panic                          wait,check
+/dev/block/platform/soc.0/mmcblk0p13           			 /efs                 ext4    noatime,nosuid,nodev,noauto_da_alloc,journal_async_commit,errors=panic                          wait
+/dev/block/platform/soc.0/mmcblk0p22        				 /persist             ext4    nosuid,nodev,data=ordered,nodelalloc                                                            wait
+/dev/block/platform/soc.0/mmcblk0p1       					 /firmware            vfat    ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337,context=u:object_r:firmware_file:s0    wait
+/dev/block/platform/soc.0/mmcblk0p2          				 /firmware-modem      vfat    ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337,context=u:object_r:firmware_file:s0    wait
+/dev/block/platform/soc.0/mmcblk0p16           			 /boot                emmc    defaults                                                                                        defaults
+/dev/block/platform/soc.0/mmcblk0p17      					 /recovery            emmc    defaults                                                                                        defaults
+
+# VOLD
+/devices/soc.0/7864900.sdhci/mmc_host*       auto                 auto    defaults    voldmanaged=sdcard1:auto,noemulatedsd
+/devices/platform/msm_hsusb*                 auto                 auto    defaults    voldmanaged=usbdisk:auto
